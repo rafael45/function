@@ -24,3 +24,6 @@ jobs:
           app-name: frafaelteste
           package: publish
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+          app-name: frafaelteste
+          package: publish
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
