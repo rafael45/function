@@ -3,13 +3,13 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 
-public class F_TESTE
+public class FTesteFunction
 {
     private readonly ILogger _logger;
 
-    public F_TESTE(ILoggerFactory loggerFactory)
+    public FTesteFunction(ILoggerFactory loggerFactory)
     {
-        _logger = loggerFactory.CreateLogger<F_TESTE>();
+        _logger = loggerFactory.CreateLogger<FTesteFunction>();
     }
 
     [Function("F_TESTE")]
