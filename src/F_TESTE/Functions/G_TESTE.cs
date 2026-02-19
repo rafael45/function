@@ -12,7 +12,7 @@ public class G_TESTE
 
     [Function("G_TESTE")]
     public void Run(
-        [QueueTrigger("g-teste", Connection = "AzureWebJobsStorage")] string message)
+        [QueueTrigger("gteste", Connection = "AzureWebJobsStorage")] string message)
     {
         _logger.LogInformation("G_TESTE recebeu: {msg}", message);
     }
