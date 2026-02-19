@@ -12,7 +12,7 @@ public class H_TESTE
 
     [Function("H_TESTE")]
     public void Run(
-        [QueueTrigger("h-teste", Connection = "AzureWebJobsStorage")] string message)
+        [QueueTrigger("hteste", Connection = "AzureWebJobsStorage")] string message)
     {
         _logger.LogInformation("H_TESTE recebeu: {msg}", message);
     }
