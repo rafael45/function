@@ -22,7 +22,7 @@ public class F_TESTE
         [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
     {
         var body = await new StreamReader(req.Body).ReadToEndAsync();
-        var queueName = "g_teste"; // <= nome válido (minúsculo)
+        var queueName = "gteste"; // <= nome válido (minúsculo)
 
         // Usa o mesmo storage definido na Function App
         var conn = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
