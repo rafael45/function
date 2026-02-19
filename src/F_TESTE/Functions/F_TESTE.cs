@@ -1,23 +1,50 @@
 using System.Net;
+using System.Text;
+using Azure.Storage.Queues;
+using Azure.Storage.Queues.Models;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 
-public class FTesteFunction
-{
-    private readonly ILogger _logger;
+namespace F_TESTE.Functions;
 
-    public FTesteFunction(ILoggerFactory loggerFactory)
+public class F_TESTE
+{
+    private readonly ILogger<F_TESTE> _logger;
+
+    public F_TESTE(ILogger<F_TESTE> logger)
     {
-        _logger = loggerFactory.CreateLogger<FTesteFunction>();
+        _logger = logger;
     }
 
     [Function("F_TESTE")]
-    public HttpResponseData Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequestData req)
+    public async Task<HttpResponseData> Run(
+        [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
     {
-        _logger.LogInformation("F_TESTE triggered.");
-        var res = req.CreateResponse(HttpStatusCode.OK);
-        res.WriteString("OK");
-        return res;
+        var body = await new StreamReader(req.Body).ReadToEndAsync();
+        var queueName = "g-teste"; // <= nome válido (minúsculo)
+
+        // Usa o mesmo storage definido na Function App
+        var conn = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+        if (string.IsNullOrWhiteSpace(conn))
+        {
+            var bad = req.CreateResponse(HttpStatusCode.InternalServerError);
+            await bad.WriteStringAsync("AzureWebJobsStorage não encontrado.");
+            return bad;
+        }
+
+        var queueClient = new QueueClient(
+            conn,
+            queueName,
+            new QueueClientOptions { MessageEncoding = QueueMessageEncoding.Base64 });
+
+        await queueClient.CreateIfNotExistsAsync();
+        await queueClient.SendMessageAsync(body);
+
+        _logger.LogInformation("Mensagem enviada para a fila {queueName}", queueName);
+
+        var ok = req.CreateResponse(HttpStatusCode.OK);
+        await ok.WriteStringAsync($"Enfileirado em {queueName}");
+        return ok;
     }
 }
