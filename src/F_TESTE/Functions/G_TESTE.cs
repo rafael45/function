@@ -12,7 +12,7 @@ namespace F_TESTE.Functions
             _logger = logger;
         }
 
-        [Function(nameof(G_TESTE))]
+        [Function("G_TESTE")]
         public void Run(
             [QueueTrigger("g-teste", Connection = "AzureWebJobsStorage")] string message)
         {
